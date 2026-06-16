@@ -15,14 +15,14 @@ from wake import WakeParameters, half_width, centerline_deficit, velocity_profil
 FIGURES = Path(__file__).resolve().parents[1] / "figures"
 FIGURES.mkdir(exist_ok=True)
 
-# placeholder C_D values for now, DRS closed vs open
-# TODO: swap for literature values (see research/ in vault)
+# anchored C_D values, DRS closed vs open
+# provenance: vault research/cd-drag-coefficient-sourcing.md (whole-car, frontal area A ~ 1.4 m^2)
 U_INF = 60.0     # m/s, ~215 km/h
 D_REF = 1.0      # reference length, normalized so x/d is what matters
 DELTA_D = D_REF  # half-width = d at x = d, starting guess (pt 3)
 
-closed = WakeParameters(U_inf=U_INF, C_D=0.90, d=D_REF, delta_d=DELTA_D)
-open_ = WakeParameters(U_inf=U_INF, C_D=0.80, d=D_REF, delta_d=DELTA_D)
+closed = WakeParameters(U_inf=U_INF, C_D=0.90, d=D_REF, delta_d=DELTA_D)  # baseline, band 0.70-1.10
+open_ = WakeParameters(U_inf=U_INF, C_D=0.72, d=D_REF, delta_d=DELTA_D)   # closed * (1 - 0.20 DRS)
 
 x_over_d = np.array([1, 2, 5, 10, 20], dtype=float)
 x_vals = x_over_d * D_REF
