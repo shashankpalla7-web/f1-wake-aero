@@ -1,7 +1,7 @@
 # sanity checks for the wake model (derivation pt 5)
-#   1. profiles at different x/d collapse onto one gaussian (self-similarity)
+#   1. profiles at different x/d collapse onto one gaussian (self-similarity) - centerline deficit sets the velocity scale, half-width sets the length scale, so plot u'(x,y)/Delta_u vs y/delta should be the same for all x/d
 #   2. Delta_u/U_inf ~ (x/d)^-1/2, delta/d ~ (x/d)^+1/2 on log-log
-#   3. integral of u'(x,y) dy is constant across x (momentum conservation)
+#   3. integral of u'(x,y) dy is constant across x (momentum conservation) - should be ~ C_D/2 for a Gaussian wake
 
 import sys
 from pathlib import Path
@@ -20,15 +20,15 @@ FIGURES.mkdir(exist_ok=True)
 U_INF = 60.0     # m/s, ~215 km/h
 D_REF = 1.0      # reference length, normalized so x/d is what matters
 DELTA_D = D_REF  # half-width = d at x = d, starting guess (pt 3)
-
+# since no single public whole-car C_D exists, the result is reported as a band from a sweep, not a single curve (see decision 2026-06-16 in vault).
 closed = WakeParameters(U_inf=U_INF, C_D=0.90, d=D_REF, delta_d=DELTA_D)  # baseline, band 0.70-1.10
 open_ = WakeParameters(U_inf=U_INF, C_D=0.72, d=D_REF, delta_d=DELTA_D)   # closed * (1 - 0.20 DRS)
-
+# sweep ranges for sensitivity analysis (see decision 2026-06-16 in vault)
 x_over_d = np.array([1, 2, 5, 10, 20], dtype=float)
 x_vals = x_over_d * D_REF
 
 
-# --- check 1: self similarity ---
+# --- check 1: self similarity of velocity profiles ---
 fig, ax = plt.subplots(figsize=(6, 4.5))
 eta = np.linspace(-3, 3, 400)
 ax.plot(eta, np.exp(-np.log(2) * eta**2), "k--", lw=2, label="exp(-ln2 * eta^2)")
