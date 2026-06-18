@@ -50,9 +50,9 @@ def loss(params, x):
     return downforce_loss_fraction(x, params, SPAN, method="rms")
 
 
-# ----------------------------------------------------------------------------
+
 # main table: U_eff/U_inf (three reductions) + downforce loss, DRS closed vs open
-# ----------------------------------------------------------------------------
+
 print("Stage 2 -- effective inflow and downforce loss vs following distance")
 print(f"U_inf = {U_INF:.0f} m/s,  wing span b = {SPAN:.1f} m,  reductions of the wake profile\n")
 print("U_eff / U_inf  (1.00 = clean air):")

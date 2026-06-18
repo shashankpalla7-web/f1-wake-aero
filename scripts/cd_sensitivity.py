@@ -30,7 +30,7 @@ CD_OPEN = CD_CLOSED * (1 - DRS_REDUCTION)   # 0.72
 CD_CLOSED_RANGE = [0.70, 0.90, 1.10]
 DRS_RANGE = [0.15, 0.20, 0.25]
 
-x_over_d = np.array([1, 2, 3, 5, 7, 10, 15, 20], dtype=float)
+x_over_d = np.array([1, 2, 3, 5, 7, 10, 15, 20], dtype=float) # following distance in units of d, the reference length 
 x_vals = x_over_d * D_REF
 
 
@@ -43,7 +43,6 @@ def deficit_frac(cd, x):
 closed_frac = np.array([deficit_frac(CD_CLOSED, x) for x in x_vals])
 open_frac = np.array([deficit_frac(CD_OPEN, x) for x in x_vals])
 
-# band: every closed C_D in the range, plus every closed*DRS open value
 all_cd = set(CD_CLOSED_RANGE)
 for cd in CD_CLOSED_RANGE:
     for r in DRS_RANGE:
