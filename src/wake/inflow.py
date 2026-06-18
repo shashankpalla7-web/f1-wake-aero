@@ -1,5 +1,5 @@
-# effective inflow seen by the following car's wing + downforce-loss proxy
-# derivation: derivations/02_effective_inflow_derivation.md
+# effective inflow, basically the speed seen by the car
+# allowing us to calculate X% velocity loss into y% downforce loss
 
 import numpy as np
 from scipy.integrate import quad
@@ -8,15 +8,12 @@ from .wake_model import WakeParameters, half_width, centerline_deficit, velocity
 
 LN2 = np.log(2.0)
 
-
+# function that efectively inverts the wake model to give an inflow speed, which we can then use to calculate downforce loss.
 def centerline_inflow(x, params: WakeParameters):
-    # U_c(x) = u(x,0): deepest point of the deficit (derivation 2, 1a)
     return params.U_inf - centerline_deficit(x, params)
 
 
 def span_mean_inflow(x, params: WakeParameters, span):
-    # arithmetic span-average of u(x,y) over y in [-b/2, b/2] (derivation 2, 1b)
-    # closed form: U_inf - Delta_u (delta/b) sqrt(pi/ln2) erf((b/2delta) sqrt(ln2))
     from scipy.special import erf
     delta = half_width(x, params)
     du = centerline_deficit(x, params)
@@ -27,8 +24,7 @@ def span_mean_inflow(x, params: WakeParameters, span):
 
 def rms_inflow(x, params: WakeParameters, span):
     # dynamic-pressure-equivalent inflow: the uniform speed delivering the same
-    # span-integrated q = 1/2 rho u^2 as the real profile (derivation 2, 1c).
-    # this is the headline U_eff fed to XFOIL in stage 3.
+    # this is the headline U_eff fed to XFOIL for simulations
     u_sq = lambda y: velocity_profile(x, y, params) ** 2
     mean_u_sq, _ = quad(u_sq, -span / 2.0, span / 2.0)
     mean_u_sq /= span
@@ -36,7 +32,6 @@ def rms_inflow(x, params: WakeParameters, span):
 
 
 def effective_inflow(x, params: WakeParameters, span, method="rms"):
-    # representative inflow speed U_eff(x). method: "rms" (headline), "mean", "centerline"
     if method == "rms":
         return rms_inflow(x, params, span)
     if method == "mean":
@@ -45,9 +40,7 @@ def effective_inflow(x, params: WakeParameters, span, method="rms"):
         return centerline_inflow(x, params)
     raise ValueError(f"unknown method: {method!r}")
 
-
+#how much downforce we're losing ( the actual data collection function)
 def downforce_loss_fraction(x, params: WakeParameters, span, method="rms"):
-    # fraction of clean-air downforce lost to the wake at distance x.
-    # downforce ~ u^2 at fixed C_l, so dL/L0 = 1 - (U_eff/U_inf)^2 (derivation 2, 2)
     u_eff = effective_inflow(x, params, span, method)
     return 1.0 - (u_eff / params.U_inf) ** 2

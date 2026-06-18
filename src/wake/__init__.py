@@ -19,3 +19,6 @@ __all__ = [
     "effective_inflow",
     "downforce_loss_fraction",
 ]
+
+
+# initiallizng all parameters and functions at the package level for easy import in scripts -  from wake import WakeParameters, centerline_deficit

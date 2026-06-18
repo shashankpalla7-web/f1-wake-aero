@@ -1,14 +1,15 @@
-# Stage 2 -- effective inflow U_eff(x) and downforce loss vs following distance
-# derivation: derivations/02_effective_inflow_derivation.md
-#
+#effective inflow U_eff(x) and downforce loss vs following distance
+
 # reduces the wake field u(x,y) to the single inflow speed the following car's wing
 # sees, then to the downforce it loses to dirty air. headline reduction is the RMS
 # (dynamic-pressure-equivalent) inflow; centerline and span-mean are reported as the
-# sensitivity range, same posture as the C_D sourcing.
-#
-# anchored C_D, provenance: vault research/cd-drag-coefficient-sourcing.md
-#   closed DRS C_D = 0.90 (band 0.70-1.10);  open DRS C_D = 0.72 (closed * (1 - 0.20))
-
+# worst and best cases, respectively. the downforce loss is reported as a percentage of
+# clean-air downforce, so 0.21 = 21% downforce loss.
+# the main table is the effective inflow and downforce loss vs following distance for
+# the two anchored cases (DRS closed vs open). a sensitivity band over a sweep of
+# C_D and DRS reduction values is also reported, since the whole-car C_D is uncertain.
+# validation checks are included in the end, since the effective inflow is a more complex calculation than the wake profile itself.
+# the main figure has two panels: effective inflow vs x/d, and downforce loss
 import sys
 from pathlib import Path
 
@@ -26,16 +27,15 @@ from wake import (
 FIGURES = Path(__file__).resolve().parents[1] / "figures"
 FIGURES.mkdir(exist_ok=True)
 
-U_INF = 60.0      # m/s, ~215 km/h
+U_INF = 60.0      # m/s, ~215 km/h (average speed lies aroun 190kmh to 260 kmh) so this is a reasonable representative value for the inflow speed seen by the following car's wing
 D_REF = 1.0
 DELTA_D = D_REF
-SPAN = 2.0        # following front-wing span, m (FIA reg max 2000 mm; derivation 2 sec 1)
+SPAN = 2.0        # following front-wing span (sourced from FIA)
 
 CD_CLOSED = 0.90
 DRS_REDUCTION = 0.20
-CD_OPEN = CD_CLOSED * (1 - DRS_REDUCTION)   # 0.72
+CD_OPEN = CD_CLOSED * (1 - DRS_REDUCTION)   # 0.72 
 
-# sweep for the sensitivity band (mirrors scripts/cd_sensitivity.py)
 CD_CLOSED_RANGE = [0.70, 0.90, 1.10]
 DRS_RANGE = [0.15, 0.20, 0.25]
 

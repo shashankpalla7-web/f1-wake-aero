@@ -21,7 +21,7 @@ U_INF = 60.0
 D_REF = 1.0
 DELTA_D = D_REF
 
-# anchored baselines
+# anchored baselines - from research in vault, see research/cd-drag-coefficient-sourcing.md
 CD_CLOSED = 0.90
 DRS_REDUCTION = 0.20
 CD_OPEN = CD_CLOSED * (1 - DRS_REDUCTION)   # 0.72
