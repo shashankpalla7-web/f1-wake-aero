@@ -6,6 +6,7 @@ from .inflow import (
     effective_inflow,
     downforce_loss_fraction,
 )
+from .xfoil_runner import run_alpha_ramp, cl_at, XfoilError
 
 __all__ = [
     "WakeParameters",
@@ -18,6 +19,9 @@ __all__ = [
     "rms_inflow",
     "effective_inflow",
     "downforce_loss_fraction",
+    "run_alpha_ramp",
+    "cl_at",
+    "XfoilError",
 ]
 
 
