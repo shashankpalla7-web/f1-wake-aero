@@ -74,6 +74,11 @@ exists to capture.
 - **Per point:** `C_l,clean` is XFOIL at `Re_clean`; `C_l,wake(x)` is XFOIL at `Re_wake(x)`,
   same section and α. Each run ramps α from 0 to 5° so every viscous solution seeds from the
   previous converged boundary layer (cold-starting viscous at α = 5° diverges).
+- **Proof of modelling.** XFOIL's own pressure-distribution plot at the operating point is
+  dumped for each section to `figures/xfoil/cp_naca{2412,4412,6412}.png` (the native solver
+  output: Cp vs x/c with the section and the full force header). Regenerate with
+  `scripts/xfoil_screenshots.py` (needs ghostscript). These are the authentic solver plots,
+  not redrawn data.
 
 ## 4. Results
 
